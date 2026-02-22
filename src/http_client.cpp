@@ -1,6 +1,9 @@
 #include "http_client.h"
 #include <curl/curl.h>
+#include <iostream>
+#include <regex>
 #include <stdexcept>
+#include <string>
 
 // Global init necessary for libcurl to prepare internal network resources
 HttpClient::HttpClient() { curl_global_init(CURL_GLOBAL_DEFAULT); }
@@ -44,4 +47,41 @@ std::string HttpClient::get(const std::string &url) const {
 
   curl_easy_cleanup(curl);
   return response;
+}
+
+// Simple helper to escape regex special characters
+std::string escapeRegex(std::string text) {
+  static const std::regex specChars{R"([-[\]{}()*+?.,\^$|#\s])"};
+  return std::regex_replace(text, specChars, R"(\$&)");
+}
+
+bool HttpClient::isUrlAllowed(const std::string &robotsContent,
+                              const std::string &url) const {
+
+  // Extract the path (e.g., "/search" from "https://google.com/search")
+  size_t pathPos = url.find("/", 8);
+  std::string path = (pathPos == std::string::npos) ? "/" : url.substr(pathPos);
+
+  // Create a Regex pattern
+  // This pattern looks for "Disallow:" followed by any number of spaces,
+  // then the specific path.
+  try {
+    std::string escapedPath = escapeRegex(path);
+
+    // look for Disallow: [path]
+    std::string pattern = "Disallow:\\s*" + escapedPath + "(\\s*|\\s*#.*)$";
+
+    std::regex re(pattern, std::regex_constants::icase |
+                               std::regex_constants::multiline);
+
+    // Search the robotsContent for this pattern
+    if (std::regex_search(robotsContent, re)) {
+      return false; // Match found ,Disallowed
+    }
+  } catch (const std::regex_error &e) {
+    // If regex fails, return false
+    return false;
+  }
+
+  return true;
 }

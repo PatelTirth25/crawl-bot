@@ -22,13 +22,25 @@ int main(int argc, char *argv[]) {
     HttpClient client;
 
     for (const auto &req : config.requests) {
-      std::cout << "\nFetching [" << req.name << "] " << req.url << "...\n";
+      std::string robotsUrl = getRobotsUrl(req.url);
 
-      // The GET request happens here
+      try {
+        std::cout << "Checking robots.txt at: " << robotsUrl << "\n";
+        std::string robotsContent = client.get(robotsUrl);
+
+        if (!client.isUrlAllowed(robotsContent, req.url)) {
+          std::cout << "Skipping " << req.url
+                    << " (Disallowed by robots.txt)\n";
+          continue;
+        }
+      } catch (...) {
+        // If robots.txt doesn't exist, it's okay to crawl
+        std::cout << "No robots.txt found, proceeding...\n";
+      }
+
+      // Now fetch the actual page
       std::string html = client.get(req.url);
-
-      std::cout << "Fetched " << html.size() << " bytes from " << req.url
-                << "\n";
+      std::cout << "Fetched " << html.size() << " bytes.\n";
     }
   } catch (const std::exception &ex) {
     std::cerr << "Error: " << ex.what() << "\n";

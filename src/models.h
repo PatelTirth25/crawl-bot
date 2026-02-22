@@ -16,4 +16,12 @@ struct BotConfig {
   std::vector<Request> requests;
 };
 
+inline std::string getRobotsUrl(const std::string &url) {
+  // find the 3rd slash in url
+  size_t pos = url.find("/", 8); // Skip "https://"
+  if (pos == std::string::npos)
+    return url + "/robots.txt";
+  return url.substr(0, pos) + "/robots.txt";
+}
+
 #endif
