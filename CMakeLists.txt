@@ -10,6 +10,7 @@ add_executable(bot
     src/main.cpp
     src/config_parser.cpp
     src/http_client.cpp
+    src/robots_parser.cpp
 )
 
 target_include_directories(bot PRIVATE src)

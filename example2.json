@@ -1,0 +1,7 @@
+{
+  "bot_name": "testBot",
+  "requests": [
+    { "name": "Wikipedia root", "url": "https://en.wikipedia.org/" },
+    { "name": "Wikipedia search", "url": "https://en.wikipedia.org/w/index.php?search=test" }
+  ]
+}
