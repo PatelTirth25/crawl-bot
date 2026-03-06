@@ -15,3 +15,4 @@ add_executable(bot
 
 target_include_directories(bot PRIVATE src)
 target_link_libraries(bot PRIVATE CURL::libcurl)
+target_compile_options(bot PRIVATE -Wall -Wextra -Wpedantic)

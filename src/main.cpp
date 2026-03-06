@@ -1,3 +1,31 @@
+/*
+ * Simple HTTP request bot.
+ *
+ * Architecture:
+ *
+ * 1. ConfigParser
+ *    - Reads the JSON configuration file.
+ *    - Converts it into C++ structures (BotConfig, Request).
+ *
+ * 2. HttpClient
+ *    - Wrapper around curl.
+ *    - Performs HTTP GET requests and returns the response body.
+ *    - Uses a custom User-Agent as required by crawlers.
+ *
+ * 3. RobotsTxt
+ *    - Parses robots.txt rules for the generic user agent (*).
+ *    - Extracts Disallow rules and checks whether a path is allowed.
+ *
+ * 4. main()
+ *    - Loads configuration.
+ *    - For each request:
+ *        a) Fetch robots.txt
+ *        b) Verify crawling permission
+ *        c) Fetch HTML content if allowed
+ *
+ * The implementation keeps components modular.
+ */
+
 #include "config_parser.h"
 #include "http_client.h"
 #include "robots_parser.h"
