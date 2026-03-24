@@ -1,0 +1,6 @@
+{
+        "bot_name": "testBot",
+        "requests": [
+            { "name": "Test", "url": "https://example.com" }
+        ]
+    }
