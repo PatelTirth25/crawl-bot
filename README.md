@@ -60,3 +60,6 @@ sudo pacman -S curl nlohmann-json catch2
 ./build.sh
 ./build/tests
 ```
+## Output
+
+Fetched html content will be stored in ```./out/``` directory.
