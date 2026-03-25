@@ -1,4 +1,4 @@
-# Crawl Bot (CVMFS Evaluation Exercise)
+# Crawl Bot
 
 This project implements a small HTTP request bot in C++ as part of the CVMFS GSoC evaluation task.
 
@@ -41,7 +41,22 @@ The bot reads a JSON configuration file, fetches web pages using HTTP, respects 
 - nlohmann-json
 - Catch2 (for tests)
 
-### Install (Arch Linux)
+## Install (Arch Linux)
 
 ```bash
 sudo pacman -S curl nlohmann-json catch2
+```
+
+## Build
+
+```bash
+./build.sh
+./build/bot file.json 
+```
+
+## Test
+
+```bash
+./build.sh
+./build/tests
+```
